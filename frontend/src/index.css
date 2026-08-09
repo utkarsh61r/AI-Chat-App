@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* Minimal global styles to ensure content is visible
+   even if Tailwind isn't fully configured. */
 * {
   box-sizing: border-box;
 }
@@ -13,4 +15,12 @@ body,
 body {
   margin: 0;
   background: #000;
+  color: #f3f5ee;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.hidden-fallback {
+  display: none;
 }

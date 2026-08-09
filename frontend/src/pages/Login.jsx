@@ -1,313 +1,174 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+// npm install lucide-react react-router-dom
+// Renders inside AuthLayout.jsx's <Outlet /> — no outer page wrapper here.
+// Also requires the orbPulse/ringSpin/font additions from
+// tailwind.config.snippet.js (shared from the earlier Login/Register build).
+
+const GoogleIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 48 48">
+    <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.4-.4-3.5z" />
+    <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 16.3 4 9.6 8.3 6.3 14.7z" />
+    <path fill="#4CAF50" d="M24 44c5.3 0 10.2-2 13.8-5.3l-6.4-5.2C29.4 35.4 26.8 36 24 36c-5.3 0-9.7-3.1-11.3-7.6l-6.5 5C9.5 39.6 16.2 44 24 44z" />
+    <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.4 5.2C40.9 36.1 44 30.6 44 24c0-1.2-.1-2.4-.4-3.5z" />
+  </svg>
+);
+
+const AppleIcon = () => (
+  <svg width="15" height="18" viewBox="0 0 384 512" fill="currentColor">
+    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zM256.4 100.9c26.9-32 24.5-61.2 23.7-71.7-23.8 1.4-51.4 16.4-67.1 34.9-17.3 19.8-27.5 44.4-25.3 71.2 25.4 2 48.6-11 68.7-34.4z" />
+  </svg>
+);
+
+export default function Login() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [remember, setRemember] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember me:", rememberMe);
+    if (!form.email || !form.password) {
+      setError('Please fill in both fields.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // TODO: replace with your real login API call
+      // const res = await fetch('/api/auth/login', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(form),
+      // });
+      // const data = await res.json();
+      console.log('Logging in with', form, 'remember:', remember);
+      navigate('/chat');
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 py-8 relative overflow-hidden">
-      
-      {/* Background Glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] bg-lime-400/10 rounded-full blur-[120px]" />
+    <>
+      <h1 className="mb-2 font-display text-[26px] font-bold sm:text-[30px]">
+        Welcome Back!
+      </h1>
+      <p className="mx-auto mb-7 max-w-[380px] text-sm leading-relaxed text-[#9aa39a] md:mx-0">
+        Sign in to access smart, personalized answers made for you.
+      </p>
 
-        <div className="absolute bottom-[-200px] right-[-200px] w-[500px] h-[500px] bg-lime-400/10 rounded-full blur-[120px]" />
-      </div>
-
-      {/* Main Container */}
-      <div className="relative w-full max-w-md">
-
-        {/* Logo / Orb */}
-        <div className="flex justify-center mb-8">
-
-          <div className="relative w-24 h-24 flex items-center justify-center">
-
-            {/* Outer Glow */}
-            <div className="absolute inset-0 rounded-full bg-lime-400/20 blur-xl" />
-
-            {/* Orb */}
-            <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-lime-200 via-lime-500 to-lime-950 shadow-[0_0_40px_rgba(190,242,100,0.5)] border border-lime-300/50">
-
-              {/* Inner Orb */}
-              <div className="absolute inset-3 rounded-full bg-black/60" />
-
-            </div>
-
-            {/* Orbit Rings */}
-            <div className="absolute inset-[-8px] rounded-full border border-lime-400/20" />
-
-            <div className="absolute inset-[-18px] rounded-full border border-lime-400/10" />
-
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="mb-[18px]">
+          <label className="mb-[7px] block text-[13.5px] font-medium" htmlFor="email">
+            Email address<span className="text-lime-300">*</span>
+          </label>
+          <div className="relative flex items-center">
+            <Mail className="pointer-events-none absolute left-[14px] h-[17px] w-[17px] text-[#9aa39a]" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              className="w-full rounded-[10px] border border-white/10 bg-white/[0.045] py-3 pl-10 pr-3 text-sm outline-none transition-colors placeholder:text-[#656e63] focus:border-lime-300 focus:bg-white/[0.06]"
+              placeholder="example@gmail.com"
+              value={form.email}
+              onChange={handleChange}
+            />
           </div>
-
         </div>
 
-        {/* Heading */}
-        <div className="text-center mb-8">
-
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Welcome Back!
-          </h1>
-
-          <p className="mt-3 text-sm sm:text-base text-gray-400 leading-relaxed max-w-sm mx-auto">
-            Sign in to access smart, personalized
-            <br className="hidden sm:block" />
-            travel plans made for you.
-          </p>
-
-        </div>
-
-        {/* Login Card */}
-        <div className="relative rounded-3xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-6 sm:p-8 shadow-2xl">
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-
-            {/* Email */}
-            <div>
-
-              <label className="block text-sm font-medium text-gray-200 mb-2">
-                Email address*
-              </label>
-
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@gmail.com"
-                required
-                className="
-                  w-full
-                  h-12
-                  px-4
-                  rounded-xl
-                  bg-black/60
-                  border border-white/15
-                  text-white
-                  placeholder:text-gray-600
-                  outline-none
-                  transition
-                  focus:border-lime-400/60
-                  focus:ring-2
-                  focus:ring-lime-400/10
-                "
-              />
-
-            </div>
-
-            {/* Password */}
-            <div>
-
-              <label className="block text-sm font-medium text-gray-200 mb-2">
-                Password*
-              </label>
-
-              <div className="relative">
-
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="@Sn123hsn#"
-                  required
-                  className="
-                    w-full
-                    h-12
-                    px-4
-                    pr-12
-                    rounded-xl
-                    bg-black/60
-                    border border-white/15
-                    text-white
-                    placeholder:text-gray-600
-                    outline-none
-                    transition
-                    focus:border-lime-400/60
-                    focus:ring-2
-                    focus:ring-lime-400/10
-                  "
-                />
-
-                {/* Password Toggle */}
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="
-                    absolute
-                    right-4
-                    top-1/2
-                    -translate-y-1/2
-                    text-gray-500
-                    hover:text-white
-                    transition
-                  "
-                  aria-label="Toggle password visibility"
-                >
-                  {showPassword ? "◉" : "◌"}
-                </button>
-
-              </div>
-
-            </div>
-
-            {/* Remember + Forgot */}
-            <div className="flex items-center justify-between gap-4">
-
-              <label className="flex items-center gap-2 cursor-pointer">
-
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="
-                    w-4
-                    h-4
-                    rounded
-                    accent-lime-400
-                    cursor-pointer
-                  "
-                />
-
-                <span className="text-sm text-gray-400">
-                  Remember me
-                </span>
-
-              </label>
-
-              <Link
-                to="/forgot-password"
-                className="
-                  text-sm
-                  text-gray-300
-                  hover:text-lime-400
-                  transition
-                  whitespace-nowrap
-                "
-              >
-                Forgot Password?
-              </Link>
-
-            </div>
-
-            {/* Sign In Button */}
-            <button
-              type="submit"
-              className="
-                w-full
-                h-12
-                rounded-full
-                bg-lime-300
-                hover:bg-lime-200
-                active:scale-[0.98]
-                text-black
-                font-semibold
-                transition-all
-                duration-200
-                shadow-[0_0_25px_rgba(190,242,100,0.15)]
-              "
-            >
-              <span className="flex items-center justify-center gap-2">
-                <span className="text-lg">✣</span>
-                Sign in
-              </span>
-            </button>
-
-          </form>
-
-          {/* Divider */}
-          <div className="flex items-center gap-4 my-7">
-
-            <div className="h-px bg-white/10 flex-1" />
-
-            <span className="text-sm text-gray-500 whitespace-nowrap">
-              Or continue with
-            </span>
-
-            <div className="h-px bg-white/10 flex-1" />
-
-          </div>
-
-          {/* Social Buttons */}
-          <div className="grid grid-cols-2 gap-3">
-
-            {/* Google */}
+        <div className="mb-[18px]">
+          <label className="mb-[7px] block text-[13.5px] font-medium" htmlFor="password">
+            Password<span className="text-lime-300">*</span>
+          </label>
+          <div className="relative flex items-center">
+            <Lock className="pointer-events-none absolute left-[14px] h-[17px] w-[17px] text-[#9aa39a]" />
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              className="w-full rounded-[10px] border border-white/10 bg-white/[0.045] py-3 pl-10 pr-9 text-sm outline-none transition-colors placeholder:text-[#656e63] focus:border-lime-300 focus:bg-white/[0.06]"
+              placeholder="Enter your password"
+              value={form.password}
+              onChange={handleChange}
+            />
             <button
               type="button"
-              className="
-                h-12
-                rounded-full
-                border border-white/10
-                bg-black/30
-                hover:bg-white/5
-                transition
-                flex
-                items-center
-                justify-center
-                gap-2
-                text-gray-200
-              "
+              className="absolute right-[14px] text-[#9aa39a] hover:text-[#f3f5ee]"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
-              <span className="font-bold text-base">G</span>
-              <span>Google</span>
+              {showPassword ? <EyeOff className="h-[17px] w-[17px]" /> : <Eye className="h-[17px] w-[17px]" />}
             </button>
-
-            {/* Apple */}
-            <button
-              type="button"
-              className="
-                h-12
-                rounded-full
-                border border-white/10
-                bg-black/30
-                hover:bg-white/5
-                transition
-                flex
-                items-center
-                justify-center
-                gap-2
-                text-gray-200
-              "
-            >
-              <span className="text-lg">●</span>
-              <span>Apple</span>
-            </button>
-
           </div>
-
-          {/* Register */}
-          <p className="text-center text-sm text-gray-500 mt-8">
-
-            Don't have an account?{" "}
-
-            <Link
-              to="/register"
-              className="
-                text-lime-300
-                hover:text-lime-200
-                font-medium
-                transition
-              "
-            >
-              Sign up
-            </Link>
-
-          </p>
-
         </div>
 
+        <div className="mb-[22px] mt-1 flex flex-wrap items-center justify-between gap-2 text-[13.5px]">
+          <label className="flex cursor-pointer select-none items-center gap-2 text-[#9aa39a]">
+            <input
+              type="checkbox"
+              className="h-[15px] w-[15px] cursor-pointer accent-lime-300"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+            />
+            Remember me
+          </label>
+          <Link to="/forgot-password" className="font-medium text-lime-300 hover:underline">
+            Forgot Password?
+          </Link>
+        </div>
+
+        {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
+
+        <button
+          type="submit"
+          className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-lime-300 py-[13px] text-[15px] font-semibold text-[#0a0d07] transition hover:bg-lime-400 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={loading}
+        >
+          <Sparkles size={16} />
+          {loading ? 'Signing in...' : 'Sign in'}
+        </button>
+      </form>
+
+      <div className="my-6 flex items-center gap-3 text-xs text-[#9aa39a]">
+        <span className="h-px flex-1 bg-white/10" />
+        Or continue with
+        <span className="h-px flex-1 bg-white/10" />
       </div>
-    </div>
+
+      <div className="flex gap-3">
+        <button
+          type="button"
+          className="flex flex-1 items-center justify-center gap-2 rounded-[10px] border border-white/10 bg-white/[0.03] py-[11px] text-[13.5px] font-medium transition hover:bg-white/[0.07]"
+        >
+          <GoogleIcon /> Google
+        </button>
+        <button
+          type="button"
+          className="flex flex-1 items-center justify-center gap-2 rounded-[10px] border border-white/10 bg-white/[0.03] py-[11px] text-[13.5px] font-medium transition hover:bg-white/[0.07]"
+        >
+          <AppleIcon /> Apple
+        </button>
+      </div>
+
+      <p className="mt-6 text-center text-[13.5px] text-[#9aa39a]">
+        Don't have an account?{' '}
+        <Link to="/register" className="font-medium text-lime-300 hover:underline">
+          Sign up
+        </Link>
+      </p>
+    </>
   );
 }
-
-export default Login;
