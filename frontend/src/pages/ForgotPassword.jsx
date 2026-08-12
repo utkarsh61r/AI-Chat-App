@@ -41,10 +41,10 @@ export default function ForgotPassword() {
   if (sent) {
     return (
       <>
-        <h1 className="mb-2 font-display text-[26px] font-bold sm:text-[30px]">
+        <h1 className="mb-2 font-display text-[22px] font-bold sm:text-[26px] md:text-[30px]">
           Check your inbox
         </h1>
-        <p className="mx-auto mb-7 max-w-[380px] text-sm leading-relaxed text-[#9aa39a] md:mx-0">
+        <p className="mx-auto mb-7 max-w-[380px] text-xs sm:text-sm leading-relaxed text-[#9aa39a] md:mx-0">
           We've sent a password reset link to <span className="text-[#f3f5ee]">{email}</span>.
           It'll expire in 15 minutes.
         </p>
@@ -73,10 +73,10 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <h1 className="mb-2 font-display text-[26px] font-bold sm:text-[30px]">
+      <h1 className="mb-2 font-display text-[22px] font-bold sm:text-[26px] md:text-[30px]">
         Forgot Password?
       </h1>
-      <p className="mx-auto mb-7 max-w-[380px] text-sm leading-relaxed text-[#9aa39a] md:mx-0">
+      <p className="mx-auto mb-7 max-w-[380px] text-xs sm:text-sm leading-relaxed text-[#9aa39a] md:mx-0">
         No worries — enter your email and we'll send you a link to reset it.
       </p>
 

@@ -63,10 +63,10 @@ export default function Login() {
 
   return (
     <>
-      <h1 className="mb-2 font-display text-[26px] font-bold sm:text-[30px]">
+      <h1 className="mb-2 font-display text-[22px] font-bold sm:text-[26px] md:text-[30px]">
         Welcome Back!
       </h1>
-      <p className="mx-auto mb-7 max-w-[380px] text-sm leading-relaxed text-[#9aa39a] md:mx-0">
+      <p className="mx-auto mb-7 max-w-[380px] text-xs sm:text-sm leading-relaxed text-[#9aa39a] md:mx-0">
         Sign in to access smart, personalized answers made for you.
       </p>
 
@@ -148,18 +148,18 @@ export default function Login() {
         <span className="h-px flex-1 bg-white/10" />
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <button
           type="button"
-          className="flex flex-1 items-center justify-center gap-2 rounded-[10px] border border-white/10 bg-white/[0.03] py-[11px] text-[13.5px] font-medium transition hover:bg-white/[0.07]"
+          className="flex flex-1 items-center justify-center gap-2 rounded-[10px] border border-white/10 bg-white/[0.03] py-[11px] text-[13.5px] font-medium transition hover:bg-white/[0.07] whitespace-nowrap"
         >
-          <GoogleIcon /> Google
+          <GoogleIcon /> <span>Google</span>
         </button>
         <button
           type="button"
-          className="flex flex-1 items-center justify-center gap-2 rounded-[10px] border border-white/10 bg-white/[0.03] py-[11px] text-[13.5px] font-medium transition hover:bg-white/[0.07]"
+          className="flex flex-1 items-center justify-center gap-2 rounded-[10px] border border-white/10 bg-white/[0.03] py-[11px] text-[13.5px] font-medium transition hover:bg-white/[0.07] whitespace-nowrap"
         >
-          <AppleIcon /> Apple
+          <AppleIcon /> <span>Apple</span>
         </button>
       </div>
 
