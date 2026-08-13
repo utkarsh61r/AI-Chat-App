@@ -1,138 +1,186 @@
-import {
-  Home as HomeIcon,
-  Plus,
-  Search,
-  Bell,
-  Grid,
-  FileText,
-  Cpu,
-  Menu,
-  X,
-} from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useState } from "react";
+import AIOrb from "../components/AIOrb";
+import ChatInput from "../components/ChatInput";
+import ChatList from "../components/ChatList";
+import FeatureCard from "../components/FeatureCard";
+import MessageBubble from "../components/MessageBubble";
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+
+const featureCards = [
+  {
+    icon: "✦",
+    title: "AI Chat",
+    description: "Smart conversations with advanced AI models for focused work and creativity.",
+  },
+  {
+    icon: "▣",
+    title: "Documents",
+    description: "Turn files, notes, and briefs into structured insights in seconds.",
+  },
+  {
+    icon: "⚡",
+    title: "AI Tools",
+    description: "Generate ideas, summaries, and action plans without breaking your flow.",
+  },
+  {
+    icon: "⌘",
+    title: "Templates",
+    description: "Launch polished workflows from a collection of ready-made prompts.",
+  },
+];
+
+const chatGroups = [
+  {
+    label: "Today",
+    items: [
+      { title: "React Hooks", meta: "2m ago", active: true },
+      { title: "Building MERN App", meta: "5m ago" },
+      { title: "Node.js Authentication", meta: "12m ago" },
+    ],
+  },
+  {
+    label: "Yesterday",
+    items: [
+      { title: "MongoDB Questions", meta: "1d ago" },
+      { title: "AI API Integration", meta: "1d ago" },
+      { title: "Design System Review", meta: "1d ago" },
+    ],
+  },
+];
+
+const exampleMessages = [
+  {
+    role: "assistant",
+    content: "Hello! I can help you plan, write, and refine anything from product ideas to system prompts.",
+    timestamp: "09:41 AM",
+  },
+  {
+    role: "user",
+    content: "Explain React hooks in a simple way and give me one practical example.",
+    timestamp: "09:42 AM",
+  },
+  {
+    role: "assistant",
+    content: "React Hooks let function components use state and lifecycle behavior without turning them into classes.\n\nExample:\n```javascript\nconst [count, setCount] = useState(0);\n```\n\nThis gives you local state, and useEffect can respond to updates or fetch data.",
+    timestamp: "09:43 AM",
+  },
+];
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSend = () => {
+    if (!message.trim()) return;
+    setMessage("");
+  };
 
   return (
-    <div className="min-h-screen bg-[#060a05] text-[#f3f5ee]">
-      <div className="flex flex-col md:grid md:grid-cols-12 gap-6 p-4 md:p-6">
-        {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-lime-300/10" />
-            <div className="font-semibold text-lime-300">AI Chat</div>
-          </div>
-          <button 
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 hover:bg-white/10 rounded-md"
-          >
-            {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+    <div className="min-h-screen bg-[#040806] text-white">
+      <div className="flex min-h-screen">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+        <div className="flex min-h-screen flex-1 flex-col">
+          <Navbar onMenuToggle={() => setSidebarOpen((prev) => !prev)} />
+
+          <main className="flex-1 px-4 pb-8 pt-6 sm:px-5 lg:px-8">
+            <div className="mx-auto max-w-[1500px]">
+              <section className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
+                <div className="max-w-3xl">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-lime-300/25 bg-lime-300/8 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-lime-200">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Your AI Assistant
+                  </div>
+
+                  <h1 className="mt-6 text-4xl font-semibold tracking-[-0.06em] text-white sm:text-5xl lg:text-6xl">
+                    Hello <span className="wave">👋</span>
+                    <span className="block text-zinc-100">How can I help you</span>
+                    <span className="block text-lime-300">today?</span>
+                  </h1>
+
+                  <p className="mt-4 max-w-xl text-sm leading-7 text-zinc-400 sm:text-base">
+                    Create polished drafts, explore ideas, and turn complex work into simple, actionable output.
+                  </p>
+
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                    <button
+                      type="button"
+                      className="rounded-full bg-lime-300 px-5 py-3 text-sm font-semibold text-black transition hover:bg-lime-200"
+                    >
+                      + New Chat
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-full border border-white/10 bg-white/[0.02] px-5 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.04]"
+                    >
+                      Explore Tools
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-1 justify-center xl:justify-end">
+                  <AIOrb />
+                </div>
+              </section>
+
+              <section className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                {featureCards.map((feature) => (
+                  <FeatureCard
+                    key={feature.title}
+                    icon={feature.icon}
+                    title={feature.title}
+                    description={feature.description}
+                  />
+                ))}
+              </section>
+
+              <section className="mt-10 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+                <div className="rounded-[30px] border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+                  <div className="mb-5 flex items-center justify-between">
+                    <h2 className="text-lg font-semibold text-white">Recent Chats</h2>
+                    <button type="button" className="text-sm text-lime-300 hover:text-lime-200">
+                      View all
+                    </button>
+                  </div>
+                  <ChatList chats={chatGroups} />
+                </div>
+
+                <div className="rounded-[30px] border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+                  <div className="mb-5 flex items-center justify-between">
+                    <h2 className="text-lg font-semibold text-white">Conversation</h2>
+                    <button type="button" className="text-sm text-lime-300 hover:text-lime-200">
+                      Live
+                    </button>
+                  </div>
+
+                  <div className="rounded-[24px] border border-white/10 bg-zinc-950/80 p-4">
+                    {exampleMessages.map((messageItem) => (
+                      <MessageBubble
+                        key={`${messageItem.role}-${messageItem.timestamp}`}
+                        role={messageItem.role}
+                        content={messageItem.content}
+                        timestamp={messageItem.timestamp}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section className="mt-8 rounded-[30px] border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-white">Prompt Studio</h2>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-lime-300/25 bg-lime-300/8 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-lime-200">
+                    Ready
+                  </div>
+                </div>
+
+                <ChatInput value={message} onChange={setMessage} onSend={handleSend} />
+              </section>
+            </div>
+          </main>
         </div>
-
-        {/* Sidebar */}
-        <aside className={`${sidebarOpen ? 'block' : 'hidden'} md:block md:col-span-2 rounded-lg bg-black/30 p-4 md:p-4`}>
-          <div className="mb-6 hidden md:flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-lime-300/10" />
-            <div className="font-semibold text-lime-300">AI Chat</div>
-          </div>
-
-          <nav className="space-y-2 text-sm text-[#cbd6c3]">
-            <div className="flex items-center gap-3 rounded-md bg-white/3 p-2 font-medium text-lime-300 cursor-pointer hover:bg-white/5 transition">
-              <HomeIcon className="h-4 w-4" /> 
-              <span>Home</span>
-            </div>
-            <div className="flex items-center gap-3 p-2 hover:bg-white/3 rounded-md cursor-pointer transition"> 
-              <Plus className="h-4 w-4" /> 
-              <span>New Chat</span>
-            </div>
-            <div className="flex items-center gap-3 p-2 hover:bg-white/3 rounded-md cursor-pointer transition"> 
-              <FileText className="h-4 w-4" /> 
-              <span>Documents</span>
-            </div>
-            <div className="flex items-center gap-3 p-2 hover:bg-white/3 rounded-md cursor-pointer transition"> 
-              <Grid className="h-4 w-4" /> 
-              <span>Templates</span>
-            </div>
-            <div className="flex items-center gap-3 p-2 hover:bg-white/3 rounded-md cursor-pointer transition"> 
-              <Cpu className="h-4 w-4" /> 
-              <span>AI Tools</span>
-            </div>
-          </nav>
-
-          <div className="mt-6 rounded-md border border-white/6 p-3 text-sm">
-            <div className="font-semibold">Upgrade to Pro</div>
-            <p className="mt-1 text-xs text-[#9aa39a]">Unlock unlimited chats, AI models & more.</p>
-            <button className="mt-3 w-full rounded-md bg-lime-300/90 px-3 py-2 text-black font-medium hover:bg-lime-300 transition">
-              Upgrade Now
-            </button>
-          </div>
-        </aside>
-
-        {/* Main */}
-        <main className="col-span-12 md:col-span-10">
-          <div className="flex flex-col lg:flex-row items-start justify-between gap-6 lg:gap-12">
-            <div className="w-full lg:max-w-2xl">
-              <div className="inline-block rounded-full bg-white/3 px-3 py-1 text-xs text-lime-300">Your AI Assistant</div>
-              <h1 className="mt-6 mb-4 text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-                Hello, Alex <span className="wave">👋</span>
-                <br /> How can I help you <span className="text-lime-300">today?</span>
-              </h1>
-              <p className="mb-6 text-sm sm:text-base text-[#9aa39a]">
-                AI-powered conversations, smart answers, and creative solutions — all in one place.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                <button className="rounded-full bg-lime-300/95 px-5 py-3 font-semibold text-black hover:bg-lime-300 transition whitespace-nowrap">
-                  + New Chat
-                </button>
-                <button className="rounded-full border border-white/10 px-5 py-3 hover:bg-white/5 transition whitespace-nowrap">
-                  Explore Tools
-                </button>
-              </div>
-
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="rounded-lg border border-white/6 p-4 sm:p-5 hover:bg-white/5 transition cursor-pointer"> 
-                  <div className="flex items-center gap-3"> 
-                    <HomeIcon className="h-5 w-5 text-lime-300 shrink-0"/> 
-                    <div className="font-semibold">AI Chat</div>
-                  </div>
-                  <p className="mt-3 text-sm text-[#9aa39a]">Smart conversations with advanced AI models.</p>
-                </div>
-                <div className="rounded-lg border border-white/6 p-4 sm:p-5 hover:bg-white/5 transition cursor-pointer"> 
-                  <div className="flex items-center gap-3"> 
-                    <FileText className="h-5 w-5 text-lime-300 shrink-0"/> 
-                    <div className="font-semibold">Documents</div>
-                  </div>
-                  <p className="mt-3 text-sm text-[#9aa39a]">Upload, analyze and get AI-powered insights.</p>
-                </div>
-                <div className="rounded-lg border border-white/6 p-4 sm:p-5 hover:bg-white/5 transition cursor-pointer"> 
-                  <div className="flex items-center gap-3"> 
-                    <Cpu className="h-5 w-5 text-lime-300 shrink-0"/> 
-                    <div className="font-semibold">AI Tools</div>
-                  </div>
-                  <p className="mt-3 text-sm text-[#9aa39a]">Explore powerful tools to boost productivity.</p>
-                </div>
-                <div className="rounded-lg border border-white/6 p-4 sm:p-5 hover:bg-white/5 transition cursor-pointer"> 
-                  <div className="flex items-center gap-3"> 
-                    <Grid className="h-5 w-5 text-lime-300 shrink-0"/> 
-                    <div className="font-semibold">Templates</div>
-                  </div>
-                  <p className="mt-3 text-sm text-[#9aa39a]">Ready-to-use templates for every need.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Orb visual */}
-            <div className="hidden lg:flex lg:w-1/3 items-center justify-center shrink-0">
-              <div className="relative h-[250px] w-[250px] sm:h-[300px] sm:w-[300px] rounded-full">
-                <div className="absolute -inset-[18px] rounded-full border border-lime-300/10 animate-pulse" />
-                <div className="h-full w-full rounded-full bg-[radial-gradient(circle_at_35%_30%,#1c2b0f_0%,#070a05_70%)]" />
-              </div>
-            </div>
-          </div>
-        </main>
       </div>
     </div>
   );

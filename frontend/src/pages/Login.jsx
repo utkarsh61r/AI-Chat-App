@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
-
-// npm install lucide-react react-router-dom
-// Renders inside AuthLayout.jsx's <Outlet /> — no outer page wrapper here.
-// Also requires the orbPulse/ringSpin/font additions from
-// tailwind.config.snippet.js (shared from the earlier Login/Register build).
+import { useAuth } from '../context/AuthContext';
 
 const GoogleIcon = () => (
   <svg width="16" height="16" viewBox="0 0 48 48">
@@ -24,6 +20,7 @@ const AppleIcon = () => (
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -38,22 +35,32 @@ export default function Login() {
     e.preventDefault();
     setError('');
 
-    if (!form.email || !form.password) {
+    const email = form.email.trim();
+    const password = form.password.trim();
+
+    if (!email || !password) {
       setError('Please fill in both fields.');
       return;
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
     setLoading(true);
+
     try {
-      // TODO: replace with your real login API call
-      // const res = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(form),
-      // });
-      // const data = await res.json();
-      console.log('Logging in with', form, 'remember:', remember);
-      navigate('/chat');
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      const mockUser = {
+        id: '1',
+        name: 'Utkarsh',
+        email,
+      };
+
+      login(mockUser);
+      navigate('/');
     } catch (err) {
       setError('Something went wrong. Please try again.');
     } finally {

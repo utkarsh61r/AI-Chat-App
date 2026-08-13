@@ -1,7 +1,12 @@
 @import "tailwindcss";
 
-/* Minimal global styles to ensure content is visible
-   even if Tailwind isn't fully configured. */
+:root {
+  color-scheme: dark;
+  font-family: Inter, "Segoe UI", sans-serif;
+  background: #040806;
+  color: #f5f7f3;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -14,20 +19,36 @@ body,
 
 body {
   margin: 0;
-  background: #000;
-  color: #f3f5ee;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:
+    radial-gradient(circle at top, rgba(163, 230, 53, 0.08), transparent 30%),
+    #040806;
+  color: #f5f7f3;
+  font-family: Inter, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
   overflow-x: hidden;
 }
 
+button,
+a,
+input,
+textarea {
+  transition: all 0.2s ease;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(163, 230, 53, 0.8);
+  outline-offset: 2px;
+}
+
 .hidden-fallback {
   display: none;
 }
 
-/* Wave animation for emoji */
 @keyframes wave {
   0% { transform: rotate(0deg); }
   10% { transform: rotate(14deg); }
@@ -39,14 +60,19 @@ body {
   100% { transform: rotate(0deg); }
 }
 
+@keyframes float {
+  0%,
+  100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+
 .wave {
   display: inline-block;
   animation: wave 2s infinite;
   transform-origin: 70% 70%;
 }
 
-/* Ensure responsive images and media */
-img, 
+img,
 video,
 canvas,
 svg {
@@ -55,8 +81,7 @@ svg {
   display: block;
 }
 
-/* Improve mobile button touch targets */
-button, 
+button,
 a,
 input[type="checkbox"],
 input[type="radio"] {
@@ -64,15 +89,20 @@ input[type="radio"] {
   min-width: 44px;
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Better focus states for accessibility */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-  outline: 2px solid #bef264;
-  outline-offset: 2px;
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(163, 230, 53, 0.3);
+  border-radius: 9999px;
 }
