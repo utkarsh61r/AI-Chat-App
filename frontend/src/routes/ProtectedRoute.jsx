@@ -1,10 +1,10 @@
+import { useUser } from "@clerk/react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 
 export default function ProtectedRoute() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isLoaded, isSignedIn } = useUser();
 
-  if (isLoading) {
+  if (!isLoaded) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#040806] text-sm text-zinc-300">
         Loading session...
@@ -12,7 +12,7 @@ export default function ProtectedRoute() {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isSignedIn) {
     return <Navigate to="/login" replace />;
   }
 

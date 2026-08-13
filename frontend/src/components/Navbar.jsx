@@ -1,15 +1,20 @@
-import { Bell, ChevronDown, LogOut, Menu, Search, Sparkles } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import {
+  Bell,
+  ChevronDown,
+  Menu,
+  Search,
+  Sparkles,
+} from "lucide-react";
+import {
+  SignInButton,
+  SignOutButton,
+  UserButton,
+  useUser,
+} from "@clerk/react";
 
 export default function Navbar({ onMenuToggle }) {
-  const navigate = useNavigate();
-  const { user, logout } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+  const { user, isLoaded } = useUser();
+  const displayName = user?.fullName || user?.firstName || "User";
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#050806]/80 backdrop-blur-xl">
@@ -62,36 +67,38 @@ export default function Navbar({ onMenuToggle }) {
             <Bell className="h-4 w-4" />
           </button>
 
-          {user ? (
+          {!isLoaded ? null : user ? (
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className="flex items-center gap-2 rounded-full border border-white/10 bg-zinc-950/80 px-2 py-1.5 pr-3 text-left transition hover:border-white/20 hover:bg-zinc-900"
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-lime-300 via-lime-200 to-emerald-400 text-xs font-bold text-zinc-950">
-                  {user.name ? user.name.charAt(0).toUpperCase() : "U"}
-                </div>
-                <span className="hidden text-sm font-medium text-white sm:block">{user.name || "User"}</span>
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-zinc-950/80 px-2 py-1.5 pr-3 text-left transition hover:border-white/20 hover:bg-zinc-900">
+                <UserButton afterSignOutUrl="/login" />
+                <span className="hidden text-sm font-medium text-white sm:block">{displayName}</span>
                 <ChevronDown className="hidden h-4 w-4 text-zinc-400 sm:block" />
-              </button>
+              </div>
 
-              <button
-                type="button"
-                aria-label="Logout"
-                onClick={handleLogout}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/3 text-zinc-200 transition hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-300"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
+              <SignOutButton signOutUrl="/login">
+                <button
+                  type="button"
+                  aria-label="Logout"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/3 text-zinc-200 transition hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-300"
+                >
+                  <span className="sr-only">Logout</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <path d="M16 17l5-5-5-5" />
+                    <path d="M21 12H9" />
+                  </svg>
+                </button>
+              </SignOutButton>
             </div>
           ) : (
-            <button
-              type="button"
-              onClick={() => navigate("/login")}
-              className="rounded-full border border-white/10 bg-zinc-950/80 px-3 py-2 text-sm font-medium text-white transition hover:border-white/20 hover:bg-zinc-900"
-            >
-              Login
-            </button>
+            <SignInButton mode="modal">
+              <button
+                type="button"
+                className="rounded-full border border-white/10 bg-zinc-950/80 px-3 py-2 text-sm font-medium text-white transition hover:border-white/20 hover:bg-zinc-900"
+              >
+                Login
+              </button>
+            </SignInButton>
           )}
         </div>
       </div>
