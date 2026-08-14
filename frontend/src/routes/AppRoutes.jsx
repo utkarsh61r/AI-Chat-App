@@ -4,6 +4,12 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Chat from "../pages/Chat";
+import Chats from "../pages/Chats";
+import Documents from "../pages/Documents";
+import Tools from "../pages/Tools";
+import History from "../pages/History";
+import Bookmarks from "../pages/Bookmarks";
+import SettingsPage from "../pages/Settings";
 import NotFound from "../pages/NotFound";
 import ForgotPassword from "../pages/ForgotPassword";
 import AuthLayout from "../layouts/AuthLayout";
@@ -23,6 +29,12 @@ function AppRoutes() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/documents" element={<Documents />} />
+          <Route path="/tools" element={<Tools />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/bookmarks" element={<Bookmarks />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
       </Route>
 

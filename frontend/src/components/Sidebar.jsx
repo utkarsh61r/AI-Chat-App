@@ -1,3 +1,4 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Bot,
   BookOpen,
@@ -16,17 +17,25 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { label: "Home", icon: Home, active: true },
-  { label: "New Chat", icon: Plus },
-  { label: "Chats", icon: MessageSquareText },
-  { label: "Documents", icon: FileText },
-  { label: "AI Tools", icon: BriefcaseBusiness },
-  { label: "History", icon: Clock3 },
-  { label: "Bookmarks", icon: Star },
-  { label: "Settings", icon: Settings },
+  { label: "Home", icon: Home, path: "/" },
+  { label: "New Chat", icon: Plus, path: "/chat" },
+  { label: "Chats", icon: MessageSquareText, path: "/chats" },
+  { label: "Documents", icon: FileText, path: "/documents" },
+  { label: "AI Tools", icon: BriefcaseBusiness, path: "/tools" },
+  { label: "History", icon: Clock3, path: "/history" },
+  { label: "Bookmarks", icon: Star, path: "/bookmarks" },
+  { label: "Settings", icon: Settings, path: "/settings" },
 ];
 
 export default function Sidebar({ isOpen = false, onClose }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    onClose();
+  };
+
   return (
     <>
       <div
@@ -36,7 +45,10 @@ export default function Sidebar({ isOpen = false, onClose }) {
         ].join(" ")}
       >
         <div className="mb-7 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={() => handleNavigation("/")}
+          >
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-lime-300/40 bg-lime-300/10 shadow-[0_0_25px_rgba(163,230,53,0.35)]">
               <Bot className="h-5 w-5 text-lime-300" />
             </div>
@@ -56,23 +68,27 @@ export default function Sidebar({ isOpen = false, onClose }) {
         </div>
 
         <nav className="space-y-2">
-          {navItems.map(({ label, icon: Icon, active }) => (
-            <button
-              key={label}
-              type="button"
-              className={[
-                "flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm font-medium transition duration-200",
-                active
-                  ? "bg-lime-300/12 text-lime-200 ring-1 ring-lime-300/20 shadow-[inset_0_0_18px_rgba(163,230,53,0.08)]"
-                  : "text-zinc-300 hover:bg-white/5 hover:text-white",
-              ].join(" ")}
-            >
-              <div className={active ? "text-lime-300" : "text-zinc-400"}>
-                <Icon className="h-4 w-4" />
-              </div>
-              <span>{label}</span>
-            </button>
-          ))}
+          {navItems.map(({ label, icon: Icon, path }) => {
+            const isActive = location.pathname === path;
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => handleNavigation(path)}
+                className={[
+                  "flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm font-medium transition duration-200",
+                  isActive
+                    ? "bg-lime-300/12 text-lime-200 ring-1 ring-lime-300/20 shadow-[inset_0_0_18px_rgba(163,230,53,0.08)]"
+                    : "text-zinc-300 hover:bg-white/5 hover:text-white",
+                ].join(" ")}
+              >
+                <div className={isActive ? "text-lime-300" : "text-zinc-400"}>
+                  <Icon className="h-4 w-4" />
+                </div>
+                <span>{label}</span>
+              </button>
+            );
+          })}
         </nav>
 
         <div className="mt-8 rounded-3xl border border-lime-300/20 bg-gradient-to-br from-lime-300/12 to-white/3 p-4 shadow-[0_0_30px_rgba(163,230,53,0.12)]">
