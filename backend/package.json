@@ -1,0 +1,36 @@
+{
+  "name": "ai-chat-backend",
+  "version": "1.0.0",
+  "description": "AI Chat Application Backend with Groq API, Node.js, Express, and MongoDB",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "ai-chat",
+    "groq",
+    "express",
+    "mongodb",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.0",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "cookie-parser": "^1.4.6",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.1.2",
+    "express-validator": "^7.0.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "groq-sdk": "^0.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
